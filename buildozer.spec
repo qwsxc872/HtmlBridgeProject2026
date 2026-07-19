@@ -502,8 +502,3 @@ android.add_src = app/src/main/java
 source.include_patterns = app/html/*
 
 android.enable_androidx = True
-
-
-android.build_tools_version = 35.0.0
-android.sdk_path = /opt/android-sdk
-android.accept_sdk_license = True
