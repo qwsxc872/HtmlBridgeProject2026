@@ -37,8 +37,10 @@ jobs:
             "build-tools;35.0.0"
 
       - name: Build APK
+        env:
+          BUILDOZER_WARN_ON_ROOT: 0
         run: |
-          yes y | buildozer android debug
+          buildozer android debug
 
       - uses: actions/upload-artifact@v4
         with:
