@@ -43,3 +43,14 @@ jobs:
         with:
           name: apk
           path: bin/*.apk
+
+
+      - name: Upload Build Log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log
+          path: |
+            .buildozer/**/*.log
+            .buildozer/android/platform/build-*.log
+            **/*.log
