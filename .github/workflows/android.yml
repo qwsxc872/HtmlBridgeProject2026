@@ -30,7 +30,7 @@ jobs:
 
       - name: Install Android build tools
         run: |
-          sdkmanager "build-tools;35.0.0" "platforms;android-35"
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "build-tools;35.0.0" "platforms;android-35"
 
       - name: Build APK
         run: |
