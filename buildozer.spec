@@ -504,3 +504,6 @@ source.include_patterns = app/html/*
 
 android.enable_androidx = True
 
+
+android.build_tools_version = 35.0.0
+android.sdk_path = /opt/android-sdk
