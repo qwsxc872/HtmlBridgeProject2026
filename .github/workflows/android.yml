@@ -40,7 +40,7 @@ jobs:
 
       - name: Install Android Build Tools
         run: |
-          sdkmanager "platform-tools" "platforms;android-34" "build-tools;35.0.0"
+          sdkmanager "platform-tools" "platforms;android-34" "build-tools;35.0.0" "build-tools;37.0.0"
 
       - name: Build APK
         env:
