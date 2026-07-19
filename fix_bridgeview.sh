@@ -1,3 +1,8 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+FILE="app/src/main/java/org/example/htmlbridge/BridgeView.java"
+
+cat > "$FILE" <<'JAVA'
 package org.example.htmlbridge;
 
 import android.app.Activity;
@@ -12,21 +17,6 @@ public class BridgeView extends WebView {
 
         super(activity);
 
-        setLayoutParams(
-            new android.widget.FrameLayout.LayoutParams(
-                android.widget.FrameLayout.LayoutParams.MATCH_PARENT,
-                android.widget.FrameLayout.LayoutParams.MATCH_PARENT
-            )
-        );
-
-
-        android.widget.FrameLayout root =
-            activity.findViewById(
-                android.R.id.content
-            );
-
-        root.addView(this);
-
 
         WebSettings s = getSettings();
 
@@ -38,15 +28,9 @@ public class BridgeView extends WebView {
 
 
 
-        
         addJavascriptInterface(
             new PythonBridge(null),
             "pythonBridge"
-        );
-
-
-        loadUrl(
-            "file:///sdcard/HtmlBridgeProject/html/index.html"
         );
 
 
@@ -54,3 +38,8 @@ public class BridgeView extends WebView {
 
 
 }
+JAVA
+
+
+echo "BridgeView fixed"
+

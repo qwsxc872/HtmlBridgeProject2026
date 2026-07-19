@@ -1,23 +1,12 @@
+from pathlib import Path
 from kivy.uix.widget import Widget
+from kivy.uix.label import Label
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.button import Button
 
-try:
-    from jnius import autoclass
 
-    PythonActivity = autoclass(
-        "org.kivy.android.PythonActivity"
-    )
-
-    BridgeView = autoclass(
-        "org.example.htmlbridge.BridgeView"
-    )
-
-    HAVE_ANDROID = True
-
-except Exception as e:
-
-    HAVE_ANDROID = False
-
-    ERROR = e
+PROJECT_DIR = Path("/sdcard/HtmlBridgeProject")
+HTML_FILE = PROJECT_DIR / "html/index.html"
 
 
 class WebView(Widget):
@@ -26,21 +15,41 @@ class WebView(Widget):
 
         super().__init__(**kwargs)
 
-        self.source = source
+        print("HTML:", HTML_FILE)
 
-        if HAVE_ANDROID:
+        layout = BoxLayout(
+            orientation="vertical"
+        )
 
-            activity = PythonActivity.mActivity
+        title = Label(
+            text="HtmlBridge Engine\n\n"
+                 + ("HTML FOUND" if HTML_FILE.exists()
+                    else "HTML NOT FOUND"),
+            font_size=30
+        )
 
-            self.view = BridgeView(activity)
+        btn = Button(
+            text="Open HTML Test",
+            font_size=25
+        )
 
-            self.view.loadUrl(
-                "file:///android_asset/html/index.html"
+        btn.bind(
+            on_press=self.test
+        )
+
+        layout.add_widget(title)
+        layout.add_widget(btn)
+
+        self.add_widget(layout)
+
+
+    def test(self, *args):
+
+        print("HTML CONTENT:")
+        
+        try:
+            print(
+                HTML_FILE.read_text()
             )
-
-            print("REAL WEBVIEW")
-
-        else:
-
-            print("FAKE WEBVIEW")
-            print(ERROR)
+        except Exception as e:
+            print(e)

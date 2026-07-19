@@ -1,3 +1,8 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+FILE="app/src/main/java/org/example/htmlbridge/PythonBridge.java"
+
+cat > "$FILE" <<'JAVA'
 package org.example.htmlbridge;
 
 import android.webkit.JavascriptInterface;
@@ -87,3 +92,8 @@ public class PythonBridge {
     }
 
 }
+JAVA
+
+
+echo "PythonBridge updated"
+

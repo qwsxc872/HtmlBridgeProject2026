@@ -1,3 +1,6 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+cat > .github/workflows/android.yml <<'YAML'
 name: Build APK
 
 on:
@@ -37,11 +40,6 @@ jobs:
           pip install buildozer==1.5.0 cython==0.29.37
 
 
-
-      - name: Install Android Build Tools
-        run: |
-          sdkmanager "platform-tools" "platforms;android-34" "build-tools;35.0.0"
-
       - name: Build APK
         env:
           BUILDOZER_WARN_ON_ROOT: 0
@@ -54,3 +52,8 @@ jobs:
         with:
           name: apk
           path: bin/*.apk
+YAML
+
+
+echo "workflow fixed"
+

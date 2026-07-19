@@ -1,49 +1,22 @@
 import sys
 from pathlib import Path
 
-sys.path.insert(
-    0,
-    str(Path(__file__).parent / "app/python")
-)
+PROJECT = Path("/sdcard/HtmlBridgeProject")
+PYTHON = PROJECT / "python"
+
+if str(PYTHON) not in sys.path:
+    sys.path.insert(0, str(PYTHON))
 
 from kivy.app import App
-from kivy.uix.widget import Widget
-from kivy.clock import Clock
-
-from jnius import autoclass
-
-
-class Root(Widget):
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        Clock.schedule_once(self.start_bridge, 0.5)
-
-    def start_bridge(self, dt):
-
-        PythonActivity = autoclass(
-            "org.kivy.android.PythonActivity"
-        )
-
-        HtmlBridgeEngine = autoclass(
-            "org.example.htmlbridge.HtmlBridgeEngine"
-        )
-
-        activity = PythonActivity.mActivity
-
-        engine = HtmlBridgeEngine(activity)
-
-        engine.start(
-            "file:///android_asset/html/index.html"
-        )
-
-        print("Bridge started")
+from webview import WebView
 
 
 class Main(App):
 
     def build(self):
-        return Root()
+        return WebView(
+            source="index.html"
+        )
 
 
 Main().run()
