@@ -69,6 +69,21 @@ jobs:
           echo "24333f8a63b6825ea9c5514f83c2829b004d1fee" > ~/.buildozer/android/platform/android-sdk/licenses/android-sdk-license
           echo "84831b9409646a918e30573bab4c9c91346d1fee" >> ~/.buildozer/android/platform/android-sdk/licenses/android-sdk-license
 
+
+      - name: Fix Buildozer sdkmanager
+        run: |
+          rm -rf ~/.buildozer/android/platform/android-sdk/tools
+
+          mkdir -p ~/.buildozer/android/platform/android-sdk/tools/bin
+
+          ln -sf $ANDROID_HOME/cmdline-tools/16.0/bin/sdkmanager \
+          ~/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager
+
+          chmod +x ~/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager
+
+          echo "sdkmanager fixed"
+          ~/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager --version
+
       - name: Build APK
         env:
           BUILDOZER_WARN_ON_ROOT: 0
