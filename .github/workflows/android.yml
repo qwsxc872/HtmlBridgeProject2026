@@ -25,21 +25,27 @@ jobs:
           python -m pip install --upgrade pip
           pip install buildozer==1.5.0 cython==0.29.37
 
-      - name: Accept licenses
-        run: |
-          yes | sdkmanager --licenses
+      - name: Accept SDK licenses
+        run: yes | sdkmanager --licenses
 
-      - name: Install SDK packages
+      - name: Install SDK
         run: |
           sdkmanager \
-            "platform-tools" \
-            "platforms;android-35" \
-            "build-tools;35.0.0"
+          "platform-tools" \
+          "platforms;android-34" \
+          "build-tools;35.0.0"
+
+      - name: Remove old Buildozer cache
+        run: rm -rf ~/.buildozer
 
       - name: Build APK
         env:
           BUILDOZER_WARN_ON_ROOT: 0
         run: |
+          export ANDROID_HOME=$ANDROID_HOME
+          export ANDROID_SDK_ROOT=$ANDROID_HOME
+          export ANDROIDSDK=$ANDROID_HOME
+
           buildozer android debug
 
       - uses: actions/upload-artifact@v4
@@ -54,5 +60,4 @@ jobs:
           name: build-log
           path: |
             .buildozer/**/*.log
-            .buildozer/android/platform/build-*.log
             **/*.log
