@@ -84,6 +84,22 @@ jobs:
           echo "sdkmanager fixed"
           ~/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager --version
 
+
+      - name: Prepare Buildozer Android SDK
+        run: |
+          rm -rf ~/.buildozer/android/platform/android-sdk
+
+          mkdir -p ~/.buildozer/android/platform
+
+          ln -s /usr/local/lib/android/sdk \
+            ~/.buildozer/android/platform/android-sdk
+
+          ls ~/.buildozer/android/platform/android-sdk
+
+          ls ~/.buildozer/android/platform/android-sdk/cmdline-tools
+
+          ls ~/.buildozer/android/platform/android-sdk/platform-tools
+
       - name: Build APK
         env:
           BUILDOZER_WARN_ON_ROOT: 0
