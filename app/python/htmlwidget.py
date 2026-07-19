@@ -1,20 +1,21 @@
-
 from kivy.uix.widget import Widget
-from kivy.properties import (
-    StringProperty,
-    NumericProperty,
-    BooleanProperty
-)
 
 class HtmlWidget(Widget):
 
-    html_id = StringProperty("")
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
-    text = StringProperty("")
+        self.dom_id = ""
+        self.tag = "div"
 
-    disabled = BooleanProperty(False)
+    def set_html(self, html):
+        print("set_html:", html)
 
-    opacity = NumericProperty(1.0)
+    def run_js(self, js):
+        print("run_js:", js)
 
-    def sync(self):
-        print("SYNC:", self.__class__.__name__, self.text)
+    def get_attr(self, name):
+        print("get_attr:", name)
+
+    def set_attr(self, name, value):
+        print("set_attr:", name, value)

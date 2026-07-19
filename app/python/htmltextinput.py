@@ -1,5 +1,7 @@
-
 from htmlwidget import HtmlWidget
 
 class HtmlTextInput(HtmlWidget):
-    pass
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.tag = "input"

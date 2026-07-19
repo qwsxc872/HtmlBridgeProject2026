@@ -1,26 +1,62 @@
-
 <!DOCTYPE html>
 <html>
+
+<head>
+
+<meta charset="utf-8">
+
+<title>HtmlBridge</title>
+
+<style>
+
+body{
+
+    background:#202020;
+
+    color:white;
+
+    font-size:28px;
+
+    text-align:center;
+
+    margin-top:100px;
+
+}
+
+button{
+
+    font-size:28px;
+
+    padding:20px;
+
+}
+
+</style>
+
+</head>
+
 <body>
 
-<h1 id="title">
-سلام HTML 😀
-</h1>
+<h1>HtmlBridge</h1>
 
-<button onclick="change()">
-HTML Button
+<button onclick="test()">
+
+Click Me
+
 </button>
 
 <script>
 
-function change(){
+function test(){
 
-document.getElementById("title")
-.innerHTML="HTML تغییر کرد 🚀";
+    document.body.style.background="#008800";
+
+    PythonBridge.post("Hello From JavaScript");
 
 }
 
 </script>
 
 </body>
+
 </html>
