@@ -13,92 +13,64 @@ jobs:
 
     steps:
 
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+
 
       - name: Setup Java 17
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 17
+          java-version: "17"
 
-      - name: Setup Android
+
+      - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
 
-
-      - name: Accept Android licenses
+      - name: Accept Android Licenses
         run: |
           yes | sdkmanager --licenses || true
+
+
+      - name: Install Android Packages
+        run: |
+          sdkmanager \
+            "platform-tools" \
+            "platforms;android-34" \
+            "build-tools;35.0.0"
+
 
       - name: Install Buildozer
         run: |
           python -m pip install --upgrade pip
-          pip install buildozer==1.5.0 cython==0.29.37
+          pip install buildozer==1.5.0
+          pip install cython==0.29.37
 
-      - name: Install Android Build Tools
+
+      - name: Clean Old Buildozer Cache
         run: |
-          sdkmanager \
-          "platform-tools" \
-          "platforms;android-34" \
-          "build-tools;35.0.0" \
-          "build-tools;37.0.0"
+          rm -rf ~/.buildozer
 
-      - name: Prepare Buildozer SDK
+
+      - name: Configure Buildozer Environment
         run: |
-          mkdir -p ~/.buildozer/android/platform/android-sdk/tools/bin
-
-          SDKMANAGER=$(find $ANDROID_HOME -name sdkmanager | head -1)
-
-          echo "SDKMANAGER=$SDKMANAGER"
-
-          ln -sf "$SDKMANAGER" \
-          ~/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager
-
-          mkdir -p ~/.buildozer/android/platform/android-sdk/licenses
-
-          cp -r $ANDROID_HOME/licenses/* \
-          ~/.buildozer/android/platform/android-sdk/licenses/ || true
-
-      - name: Prepare Buildozer SDK licenses
-        run: |
-          mkdir -p ~/.buildozer/android/platform/android-sdk/licenses
-          echo "24333f8a63b6825ea9c5514f83c2829b004d1fee" > ~/.buildozer/android/platform/android-sdk/licenses/android-sdk-license
-          echo "84831b9409646a918e30573bab4c9c91346d1fee" >> ~/.buildozer/android/platform/android-sdk/licenses/android-sdk-license
-
-
-      - name: Fix Buildozer sdkmanager
-        run: |
-          rm -rf ~/.buildozer/android/platform/android-sdk/tools
-
-          mkdir -p ~/.buildozer/android/platform/android-sdk/tools/bin
-
-          ln -sf $ANDROID_HOME/cmdline-tools/16.0/bin/sdkmanager \
-          ~/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager
-
-          chmod +x ~/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager
-
-          echo "sdkmanager fixed"
-          ~/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager --version
-
-
-      - name: Prepare Buildozer Android SDK
-        run: |
-          rm -rf ~/.buildozer/android/platform/android-sdk
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT"
 
           mkdir -p ~/.buildozer/android/platform
 
-          ln -s /usr/local/lib/android/sdk \
-            ~/.buildozer/android/platform/android-sdk
+          ln -s $ANDROID_HOME \
+          ~/.buildozer/android/platform/android-sdk
 
-          ls ~/.buildozer/android/platform/android-sdk
+          ls -la ~/.buildozer/android/platform/android-sdk
 
-          ls ~/.buildozer/android/platform/android-sdk/cmdline-tools
-
-          ls ~/.buildozer/android/platform/android-sdk/platform-tools
 
       - name: Build APK
         env:
@@ -106,8 +78,9 @@ jobs:
         run: |
           buildozer android debug
 
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: apk
+          name: HtmlBridge-debug-apk
           path: bin/*.apk
