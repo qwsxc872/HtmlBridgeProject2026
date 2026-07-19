@@ -39,6 +39,13 @@ jobs:
           "build-tools;35.0.0" \
           "build-tools;37.0.0"
 
+      - name: Fix Buildozer SDK manager path
+        run: |
+          mkdir -p ~/.buildozer/android/platform/android-sdk/tools/bin
+
+          ln -sf $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager \
+          ~/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager
+
       - name: Prepare Buildozer SDK licenses
         run: |
           mkdir -p ~/.buildozer/android/platform/android-sdk/licenses
