@@ -26,22 +26,22 @@ jobs:
           pip install buildozer==1.6.0 cython==0.29.37
 
       - name: Prepare Android SDK
-        env:
-          ANDROID_SDK_ROOT: /home/runner/.buildozer/android/platform/android-sdk
         run: |
-          mkdir -p $ANDROID_SDK_ROOT
+          echo "ANDROID_HOME=$ANDROID_HOME"
 
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
 
           $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager \
-            --sdk_root=$ANDROID_SDK_ROOT \
             "platform-tools" \
             "platforms;android-35" \
             "build-tools;37.0.0"
 
+          mkdir -p ~/.buildozer/android/platform
+
+          ln -s $ANDROID_HOME \
+          ~/.buildozer/android/platform/android-sdk
+
       - name: Build APK
-        env:
-          ANDROID_SDK_ROOT: /home/runner/.buildozer/android/platform/android-sdk
         run: |
           buildozer android debug
 
