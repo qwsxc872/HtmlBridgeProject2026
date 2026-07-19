@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+
+<style>
+
+body{
+    background:#202020;
+    color:white;
+    font-size:20px;
+    margin:20px;
+}
+
+input{
+    width:250px;
+    height:40px;
+    font-size:20px;
+}
+
+button{
+    width:180px;
+    height:45px;
+    font-size:20px;
+    margin-top:15px;
+}
+
+</style>
+
+<script>
+
+function buttonClick(){
+
+    let txt=document.getElementById("txt").value;
+
+    if(window.PythonBridge){
+        PythonBridge.buttonClicked(txt);
+    }
+
+}
+
+function setText(value){
+    document.getElementById("txt").value=value;
+}
+
+</script>
+
+</head>
+
+<body>
+
+<h2>HtmlBridge Test</h2>
+
+<input id="txt" value="Hello">
+
+<br>
+
+<button onclick="buttonClick()">
+HTML Button
+</button>
+
+</body>
+
+</html>
