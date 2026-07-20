@@ -3,7 +3,7 @@ name: Build Android APK
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:  # این باعث میشه بتونی دستی اجراش کنی
+  workflow_dispatch:
 
 jobs:
   build:
@@ -22,23 +22,22 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y \
-          git \
-          zip \
-          unzip \
+          git zip unzip \
           openjdk-17-jdk \
-          autoconf \
-          libtool \
-          pkg-config \
-          zlib1g-dev \
-          libncurses5-dev \
-          libstdc++-12-dev \
-          python3-pip
+          autoconf libtool pkg-config \
+          zlib1g-dev libncurses5-dev \
+          libstdc++-12-dev
         pip3 install --upgrade pip
         pip3 install buildozer cython
 
-    - name: Build with Buildozer
+    - name: Accept SDK licenses
       run: |
-        buildozer android debug
+        mkdir -p ~/.android
+        echo "✅ Accepting all SDK licenses..."
+        yes | ~/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses || true
+
+    - name: Build APK
+      run: buildozer android debug
 
     - name: Upload APK
       uses: actions/upload-artifact@v4

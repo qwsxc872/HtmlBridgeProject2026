@@ -4,7 +4,7 @@ title = HtmlBridge
 
 package.name = htmlbridge
 
-package.domain = org.example
+package.domain = org.test
 
 source.dir = .
 
@@ -14,7 +14,7 @@ source.include_patterns = app/html/*
 
 version = 0.1
 
-requirements = python3,kivy,pyjnius
+requirements = python3,kivy
 
 orientation = portrait
 
