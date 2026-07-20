@@ -15,7 +15,7 @@ android.accept_sdk_license = True
 android.sdk_api = 34
 android.sdk_build_tools = 34.0.0
 android.ndk_api = 21
-android.gradle_dependencies = 
+android.gradle_dependencies =
 android.ignore_aidl = True
 android.permissions = INTERNET
 [buildozer]
