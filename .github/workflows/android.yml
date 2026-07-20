@@ -37,7 +37,7 @@ jobs:
           sdkmanager \
             "platform-tools" \
             "platforms;android-34" \
-            "build-tools;35.0.0"
+            "build-tools;34.0.0"
 
       - name: Install Buildozer
         run: |
@@ -58,7 +58,12 @@ jobs:
       - name: Build APK
         env:
           BUILDOZER_WARN_ON_ROOT: 0
+          ANDROID_NDK: "25c"
+          ANDROID_SDK_API: "34"
+          ANDROID_MIN_API: "21"
         run: |
+          # Force NDK version
+          export ANDROID_NDK_HOME=/usr/local/lib/android/sdk/ndk/25.2.9519653
           buildozer -v android debug
 
       - name: Upload APK
