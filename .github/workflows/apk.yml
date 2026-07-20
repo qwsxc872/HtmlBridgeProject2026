@@ -1,0 +1,78 @@
+name: Build APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          git zip unzip \
+          openjdk-17-jdk \
+          autoconf libtool pkg-config \
+          zlib1g-dev
+        pip3 install --upgrade pip
+        pip3 install python-for-android cython
+
+    - name: Setup SDK and NDK
+      run: |
+        # دانلود SDK Command Line Tools
+        wget -q https://dl.google.com/android/repository/commandlinetools-linux-11485218_latest.zip
+        mkdir -p $HOME/android-sdk/cmdline-tools
+        unzip -q commandlinetools-linux-*.zip -d $HOME/android-sdk/cmdline-tools
+        mv $HOME/android-sdk/cmdline-tools/cmdline-tools $HOME/android-sdk/cmdline-tools/latest
+        
+        # دانلود NDK r25c
+        wget -q https://dl.google.com/android/repository/android-ndk-r25c-linux.zip
+        unzip -q android-ndk-r25c-linux.zip
+        mv android-ndk-r25c $HOME/android-ndk-r25c
+        
+        # تنظیم محیط
+        echo "ANDROID_SDK_ROOT=$HOME/android-sdk" >> $GITHUB_ENV
+        echo "ANDROID_NDK_HOME=$HOME/android-ndk-r25c" >> $GITHUB_ENV
+        echo "$HOME/android-sdk/cmdline-tools/latest/bin" >> $GITHUB_PATH
+        
+        # قبول لایسنس
+        yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses || true
+
+    - name: Build APK
+      run: |
+        # نصب Kivy
+        pip3 install kivy
+        
+        # ساخت APK
+        p4a apk \
+          --requirements=python3,kivy \
+          --private=. \
+          --package=org.test.htmlbridge \
+          --name="HtmlBridge" \
+          --version=1.0 \
+          --bootstrap=sdl2 \
+          --dist-name=htmlbridge \
+          --android-api=34 \
+          --arch=arm64-v8a \
+          --permission=INTERNET \
+          --debug
+      env:
+        ANDROID_SDK_ROOT: ${{ env.ANDROID_SDK_ROOT }}
+        ANDROID_NDK_HOME: ${{ env.ANDROID_NDK_HOME }}
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: HtmlBridge-APK
+        path: *.apk
